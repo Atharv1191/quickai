@@ -17,11 +17,8 @@ app.use(clerkMiddleware())
 app.use(requireAuth())
 app.use('/api/ai',aiRoute)
 app.use('/api/user',userRoute)
-app.get('/', (req, res) => {
-  res.send("server is live");
-});
+app.get('/',(req,res)=>res.send("server is running"))
 const PORT= process.env.PORT || 3000
 
-app.listen(PORT,()=>{
-    console.log("server is running on port",PORT)
-})
+app.listen(PORT,()=>console.log(`Server is running on port ${PORT}`))
+module.exports = app;
