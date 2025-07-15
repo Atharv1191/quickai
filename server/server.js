@@ -8,23 +8,31 @@ const userRoute = require('./routes/userRoutes');
 const connectCloudinary = require("./configs/cloudinary");
 
 const app = express();
+
+// Connect Cloudinary
 connectCloudinary();
 
+// Middleware
 app.use(express.json());
 app.use(cors());
+app.use(clerkMiddleware()); // Attach Clerk to req
 
-// Clerk middleware
-app.use(clerkMiddleware());
-
-// Protected routes
-app.use(requireAuth());
-app.use('/api/ai', aiRoute);
-app.use('/api/user', userRoute);
-
-// Test route
+// ✅ Public route (no auth)
 app.get('/', (req, res) => {
-  res.send("server is live");
+  res.send("API is live ✅");
 });
 
-// ✅ Don't call app.listen()
-module.exports = app; // ✅ Correct export for Vercel
+// ✅ Protected routes
+app.use('/api/ai', requireAuth(), aiRoute);
+app.use('/api/user', requireAuth(), userRoute);
+
+// ✅ Local server only for development (Vercel handles it differently)
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log("Server is running on port", PORT);
+  });
+}
+
+// ✅ Export app for Vercel
+module.exports = app;
