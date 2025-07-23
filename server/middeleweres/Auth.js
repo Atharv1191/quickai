@@ -4,7 +4,7 @@ const { clerkClient } = require('@clerk/express');
 const auth = async (req, res, next) => {
   try {
     const { userId, has } = await req.auth(); // ✅ This assumes `req.auth()` exists
-
+    console.log("🧪 Backend userId:", userId);
     const hasPremiumPlan = await has({ plan: "premium" }); // ✅ spelling fixed: "primium" → "premium"
 
     const user = await clerkClient.users.getUser(userId);

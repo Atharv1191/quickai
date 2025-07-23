@@ -4,7 +4,7 @@ const sql = require("../configs/db");
 const getUserCreations = async (req, res) => {
   try {
     const { userId } = req.auth();
-
+    console.log("🧪 Clerk userId:", userId);
     const creations = await sql`
       SELECT * FROM creations
       WHERE user_id = ${userId}
